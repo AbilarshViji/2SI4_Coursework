@@ -5,9 +5,11 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger("-4");
-        HugeInteger y = new HugeInteger("-3");
-        System.out.println(x.subtract(y).neg);
+        HugeInteger x = new HugeInteger("-1506");
+        HugeInteger y = new HugeInteger("-67");
+        System.out.println(x.hugeInt);
+        System.out.println(y.hugeInt);
+        System.out.println(x.add(y).hugeInt);
     }
 
     private String hugeInt; //Store the number
@@ -64,6 +66,7 @@ public class HugeInteger {
             hugeIntSB.append(Integer.toString(rand.nextInt(10)));
         }
         //set instance variables
+        neg = (rand.nextInt(2)==1);
         hugeInt = hugeIntSB.toString();
         length = n;
     }
@@ -199,7 +202,7 @@ public class HugeInteger {
             } else if (!h.neg && this.neg) {
                 return h.subtract(this);
             } else {
-                for (int i = 0; i < this.length; i++) {
+                for (int i = 0; i < h.length; i++) {
                     if (carry == true) {
                         sumSB.append((Integer.parseInt(Character.toString(thisSB.charAt(i))) + Integer.parseInt(Character.toString(hSB.charAt(i))) + 1) % 10);
                     } else {
