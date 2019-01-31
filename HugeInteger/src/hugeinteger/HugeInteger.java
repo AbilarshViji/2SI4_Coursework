@@ -5,8 +5,8 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger("12885");
-        HugeInteger y = new HugeInteger("15");
+        HugeInteger x = new HugeInteger("19998");
+        HugeInteger y = new HugeInteger("1111");        
         System.out.println(y.add(x).hugeInt);
     }
 
@@ -68,7 +68,6 @@ public class HugeInteger {
         if (h.length >= this.length) {
             if (!h.neg && !this.neg) {
                 for (int i = 0; i < this.length; i++) {
-                    //System.out.println((Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i)))) % 10);
                     if (carry == true) {
                         sumSB.append((Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i))) + 1) % 10);
                     } else {
@@ -80,23 +79,25 @@ public class HugeInteger {
                         carry = false;
                     }
                 }
-
-                if (carry == true) {
-                    //TODO last carry + 1
-                    int lastCarry = (Integer.parseInt(hSB.substring(this.length)));
-                    lastCarry += Math.pow(10, h.length - this.length - 1);
-                    //if ( lastCarry / 10 != 0) {
-                    StringBuilder flipNum = new StringBuilder(Integer.toString(lastCarry));
-                    //    flipNum.reverse();
-                    sumSB.append(flipNum);
-                    // } else {
-                    //    sumSB.append(lastCarry);
-                    //    sumSB.append(hSB.substring(this.length + 1));
-                    //}
-
-                } else {
-                    sumSB.append(hSB.substring(this.length));
+                int count = this.length;
+                while (carry == true) {
+                    if (carry && count == h.length){
+                        sumSB.append("1");
+                        carry = false;
+                        break;
+                    }
+                    if (Integer.parseInt(Character.toString(hSB.charAt(count))) + 1 >= 10) {
+                        
+                        sumSB.append((Integer.parseInt(Character.toString(hSB.charAt(count))) + 1)%10);
+                        count += 1;
+                        
+                    } else {
+                        sumSB.append(Integer.parseInt(Character.toString(hSB.charAt(count))) + 1);
+                        count +=1;
+                        carry = false;
+                    }
                 }
+                sumSB.append(hSB.substring(count));
             }
         }
         sumSB.reverse();
