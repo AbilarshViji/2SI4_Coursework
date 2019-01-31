@@ -5,11 +5,11 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger("123");
-        HugeInteger y = new HugeInteger("1");
+        HugeInteger x = new HugeInteger("999");
+        HugeInteger y = new HugeInteger("11");
         System.out.println(y.add(x).hugeInt);
-
     }
+
     private String hugeInt;
     private boolean neg = false;
     private int length;
@@ -68,7 +68,7 @@ public class HugeInteger {
         if (h.length > this.length) {
             if (!h.neg && !this.neg) {
                 for (int i = this.length - 1; i >= 0; i--) {
-                    System.out.println((Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i)))) % 10);
+                    //System.out.println((Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i)))) % 10);
                     if (carry == true) {
                         sumSB.append((Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i))) + 1) % 10);
                         carry = false;
@@ -80,7 +80,15 @@ public class HugeInteger {
                     }
                 }
                 if (carry == true) {
-                    sumSB.append(Integer.parseInt(Character.toString(hSB.charAt(this.length))) + 1);
+                    int lastCarry = (Integer.parseInt(Character.toString(hSB.charAt(this.length))) + 1);
+                    if ((Integer) lastCarry/10 != 0){
+                        sumSB.append(lastCarry%10);
+                        sumSB.append("1");
+                    }
+                    else{
+                        sumSB.append(lastCarry);
+                    }
+                    
                     sumSB.append(hSB.substring(this.length + 1));
                 } else {
                     sumSB.append(hSB.substring(this.length));
@@ -90,12 +98,22 @@ public class HugeInteger {
         sumSB.reverse();
         return new HugeInteger(sumSB.toString());
     }
-    /*
+/*
     public HugeInteger subtract(HugeInteger h) {
-
+        StringBuilder subSB = new StringBuilder();
+        StringBuilder hSB = new StringBuilder(h.hugeInt);
+        StringBuilder thisSB = new StringBuilder(this.hugeInt);
+        if (this.length > h.length) {
+            if (!this.neg && !h.neg) {
+                for (int i = this.length - 1; i >= 0; i--) {
+                    
+                }
+            }
+        }
     }
+}
 
-    public HugeInteger multiply(HugeInteger h) {
+public HugeInteger multiply(HugeInteger h) {
 
     }
 
