@@ -5,8 +5,8 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger("999");
-        HugeInteger y = new HugeInteger("11");
+        HugeInteger x = new HugeInteger("12885");
+        HugeInteger y = new HugeInteger("15");
         System.out.println(y.add(x).hugeInt);
     }
 
@@ -65,31 +65,35 @@ public class HugeInteger {
         thisSB.reverse();
         boolean carry = false;
 
-        if (h.length > this.length) {
+        if (h.length >= this.length) {
             if (!h.neg && !this.neg) {
-                for (int i = this.length - 1; i >= 0; i--) {
+                for (int i = 0; i < this.length; i++) {
                     //System.out.println((Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i)))) % 10);
                     if (carry == true) {
                         sumSB.append((Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i))) + 1) % 10);
-                        carry = false;
                     } else {
                         sumSB.append((Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i)))) % 10);
                     }
-                    if ((Integer) (Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i)))) / 10 != 0) {
+                    if ((Integer) (Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i))) + (carry ? 1 : 0)) / 10 != 0) {
                         carry = true;
+                    } else {
+                        carry = false;
                     }
                 }
+
                 if (carry == true) {
-                    int lastCarry = (Integer.parseInt(Character.toString(hSB.charAt(this.length))) + 1);
-                    if ((Integer) lastCarry/10 != 0){
-                        sumSB.append(lastCarry%10);
-                        sumSB.append("1");
-                    }
-                    else{
-                        sumSB.append(lastCarry);
-                    }
-                    
-                    sumSB.append(hSB.substring(this.length + 1));
+                    //TODO last carry + 1
+                    int lastCarry = (Integer.parseInt(hSB.substring(this.length)));
+                    lastCarry += Math.pow(10, h.length - this.length - 1);
+                    //if ( lastCarry / 10 != 0) {
+                    StringBuilder flipNum = new StringBuilder(Integer.toString(lastCarry));
+                    //    flipNum.reverse();
+                    sumSB.append(flipNum);
+                    // } else {
+                    //    sumSB.append(lastCarry);
+                    //    sumSB.append(hSB.substring(this.length + 1));
+                    //}
+
                 } else {
                     sumSB.append(hSB.substring(this.length));
                 }
@@ -98,21 +102,70 @@ public class HugeInteger {
         sumSB.reverse();
         return new HugeInteger(sumSB.toString());
     }
-/*
+
     public HugeInteger subtract(HugeInteger h) {
         StringBuilder subSB = new StringBuilder();
         StringBuilder hSB = new StringBuilder(h.hugeInt);
         StringBuilder thisSB = new StringBuilder(this.hugeInt);
+        hSB.reverse();
+        thisSB.reverse();
+        boolean carry = false;
         if (this.length > h.length) {
             if (!this.neg && !h.neg) {
                 for (int i = this.length - 1; i >= 0; i--) {
-                    
+                    if (Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))) < 0) {
+
+                    }
                 }
             }
         }
+        subSB.reverse();
+        return new HugeInteger(subSB.toString());
     }
-}
 
+    public int compareTo(HugeInteger h) {
+        if (!h.neg && !this.neg) {
+            if (this.length > h.length) {
+                return 1;
+            } else if (this.length < h.length) {
+                return -1;
+            } else {
+                for (int i = 0; i < this.length; i++) {
+                    if (this.hugeInt.charAt(i) > h.hugeInt.charAt(i)) {
+                        return 1;
+                    } else if (this.hugeInt.charAt(i) < h.hugeInt.charAt(i)) {
+                        return -1;
+                    }
+                }
+                return 0;
+            }
+        } else if (h.neg && !this.neg) {
+            return 1;
+        } else if (!h.neg && this.neg) {
+            return -1;
+        } else {
+            if (this.length > h.length) {
+                return -1;
+            } else if (this.length < h.length) {
+                return 1;
+            } else {
+                for (int i = 0; i < this.length; i++) {
+                    if (this.hugeInt.charAt(i) > h.hugeInt.charAt(i)) {
+                        return -1;
+                    } else if (this.hugeInt.charAt(i) < h.hugeInt.charAt(i)) {
+                        return 1;
+                    }
+                }
+                return 0;
+            }
+        }
+    }
+
+    public String toString() {
+        return this.hugeInt;
+    }
+
+    /*
 public HugeInteger multiply(HugeInteger h) {
 
     }
@@ -121,13 +174,8 @@ public HugeInteger multiply(HugeInteger h) {
 
     }
 
-    public int compareTo(HugeInteger h) {
 
-    }
 
-    public String toString() {
-
-    }
 
 
      */
