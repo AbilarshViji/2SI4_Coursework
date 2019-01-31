@@ -5,9 +5,9 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger("19998");
-        HugeInteger y = new HugeInteger("1111");        
-        System.out.println(y.add(x).hugeInt);
+        HugeInteger x = new HugeInteger("-5");
+        HugeInteger y = new HugeInteger("-9");
+        System.out.println(y.add(x).neg);
     }
 
     private String hugeInt;
@@ -20,11 +20,13 @@ public class HugeInteger {
         if (val.length() == 0 || val.charAt(0) == '-' && val.length() == 1) {
             throw new NumberFormatException("Bad Input, not big enough");
         }
+        length = val.length();
 
         int i = 0;
         if (val.charAt(0) == '-') {
             neg = true;
             i = 1;
+            length -= 1;
         }
         try {
             for (; i < val.length(); i++) {
@@ -39,7 +41,6 @@ public class HugeInteger {
             throw e;
         }
         hugeInt = hugeIntSB.toString();
-        length = val.length();
 
     }
 
@@ -61,12 +62,14 @@ public class HugeInteger {
         StringBuilder sumSB = new StringBuilder();
         StringBuilder hSB = new StringBuilder(h.hugeInt);
         StringBuilder thisSB = new StringBuilder(this.hugeInt);
-        hSB.reverse();
-        thisSB.reverse();
-        boolean carry = false;
 
         if (h.length >= this.length) {
+            hSB.reverse();
+            thisSB.reverse();
+            boolean carry = false;
             if (!h.neg && !this.neg) {
+
+                //TODO CHECK IF THIS SHOULD BE HERE OR ABOVE
                 for (int i = 0; i < this.length; i++) {
                     if (carry == true) {
                         sumSB.append((Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i))) + 1) % 10);
@@ -81,26 +84,66 @@ public class HugeInteger {
                 }
                 int count = this.length;
                 while (carry == true) {
-                    if (carry && count == h.length){
+                    if (carry && count == h.length) {
                         sumSB.append("1");
                         carry = false;
                         break;
                     }
                     if (Integer.parseInt(Character.toString(hSB.charAt(count))) + 1 >= 10) {
-                        
-                        sumSB.append((Integer.parseInt(Character.toString(hSB.charAt(count))) + 1)%10);
+
+                        sumSB.append((Integer.parseInt(Character.toString(hSB.charAt(count))) + 1) % 10);
                         count += 1;
-                        
+
                     } else {
                         sumSB.append(Integer.parseInt(Character.toString(hSB.charAt(count))) + 1);
-                        count +=1;
+                        count += 1;
                         carry = false;
                     }
                 }
                 sumSB.append(hSB.substring(count));
+            } else if (h.neg && !this.neg) {
+                return this.subtract(h);
+            } else if (!h.neg && this.neg) {
+                return h.subtract(this);
+            } else {
+                for (int i = 0; i < this.length; i++) {
+                    if (carry == true) {
+                        sumSB.append((Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i))) + 1) % 10);
+                    } else {
+                        sumSB.append((Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i)))) % 10);
+                    }
+                    if ((Integer) (Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i))) + (carry ? 1 : 0)) / 10 != 0) {
+                        carry = true;
+                    } else {
+                        carry = false;
+                    }
+                }
+                int count = this.length;
+                while (carry == true) {
+                    if (carry && count == h.length) {
+                        sumSB.append("1");
+                        carry = false;
+                        break;
+                    }
+                    if (Integer.parseInt(Character.toString(hSB.charAt(count))) + 1 >= 10) {
+
+                        sumSB.append((Integer.parseInt(Character.toString(hSB.charAt(count))) + 1) % 10);
+                        count += 1;
+
+                    } else {
+                        sumSB.append(Integer.parseInt(Character.toString(hSB.charAt(count))) + 1);
+                        count += 1;
+                        carry = false;
+                    }
+                }
+                sumSB.append(hSB.substring(count));
+                sumSB.append("-");
             }
+//TODO Both neg
+//TODO else other way around
+            sumSB.reverse();
+            return new HugeInteger(sumSB.toString());
         }
-        sumSB.reverse();
         return new HugeInteger(sumSB.toString());
     }
 
@@ -111,11 +154,13 @@ public class HugeInteger {
         hSB.reverse();
         thisSB.reverse();
         boolean carry = false;
-        if (this.length > h.length) {
+        if (this.length >= h.length) {
             if (!this.neg && !h.neg) {
                 for (int i = this.length - 1; i >= 0; i--) {
-                    if (Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))) < 0) {
-
+                    if (Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))) > 0) {
+                        subSB.append(Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))));
+                    } else {
+                        carry = true;
                     }
                 }
             }
