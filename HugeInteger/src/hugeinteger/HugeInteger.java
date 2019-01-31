@@ -5,14 +5,17 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger("$");
+        HugeInteger x = new HugeInteger("123");
+        HugeInteger y = new HugeInteger("1");
+        System.out.println(y.add(x).hugeInt);
+
     }
-    public String hugeInt;
-    public boolean neg = false;
+    private String hugeInt;
+    private boolean neg = false;
+    private int length;
 
     public HugeInteger(String val) throws NumberFormatException {
         StringBuilder hugeIntSB = new StringBuilder();
-
         //Check if there is something in the string input
         if (val.length() == 0 || val.charAt(0) == '-' && val.length() == 1) {
             throw new NumberFormatException("Bad Input, not big enough");
@@ -26,7 +29,6 @@ public class HugeInteger {
         try {
             for (; i < val.length(); i++) {
                 Integer.parseInt(Character.toString(val.charAt(i)));
-                System.out.println(Character.getNumericValue(val.charAt(i)));
                 hugeIntSB.append(val.charAt(i));
             }
         } catch (NumberFormatException e) {
@@ -37,6 +39,7 @@ public class HugeInteger {
             throw e;
         }
         hugeInt = hugeIntSB.toString();
+        length = val.length();
 
     }
 
@@ -51,12 +54,43 @@ public class HugeInteger {
             hugeIntSB.append(Integer.toString(rand.nextInt(10)));
         }
         hugeInt = hugeIntSB.toString();
+        length = n;
+    }
+
+    public HugeInteger add(HugeInteger h) {
+        StringBuilder sumSB = new StringBuilder();
+        StringBuilder hSB = new StringBuilder(h.hugeInt);
+        StringBuilder thisSB = new StringBuilder(this.hugeInt);
+        hSB.reverse();
+        thisSB.reverse();
+        boolean carry = false;
+
+        if (h.length > this.length) {
+            if (!h.neg && !this.neg) {
+                for (int i = this.length - 1; i >= 0; i--) {
+                    System.out.println((Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i)))) % 10);
+                    if (carry == true) {
+                        sumSB.append((Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i))) + 1) % 10);
+                        carry = false;
+                    } else {
+                        sumSB.append((Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i)))) % 10);
+                    }
+                    if ((Integer) (Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i)))) / 10 != 0) {
+                        carry = true;
+                    }
+                }
+                if (carry == true) {
+                    sumSB.append(Integer.parseInt(Character.toString(hSB.charAt(this.length))) + 1);
+                    sumSB.append(hSB.substring(this.length + 1));
+                } else {
+                    sumSB.append(hSB.substring(this.length));
+                }
+            }
+        }
+        sumSB.reverse();
+        return new HugeInteger(sumSB.toString());
     }
     /*
-    public HugeInteger add(HugeInteger h) {
-
-    }
-
     public HugeInteger subtract(HugeInteger h) {
 
     }
@@ -76,5 +110,7 @@ public class HugeInteger {
     public String toString() {
 
     }
+
+
      */
 }
