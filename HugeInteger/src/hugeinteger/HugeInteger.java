@@ -5,14 +5,14 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger("3");
-        HugeInteger y = new HugeInteger("4");
+        HugeInteger x = new HugeInteger("-4");
+        HugeInteger y = new HugeInteger("-3");
         System.out.println(x.subtract(y).neg);
     }
 
-    private String hugeInt;
-    private boolean neg = false;
-    private int length;
+    private String hugeInt; //Store the number
+    private boolean neg = false; //Store if its positive or negative
+    private int length; //Store length of number, excluding negative sign
 
     public HugeInteger(String val) throws NumberFormatException {
         StringBuilder hugeIntSB = new StringBuilder();
@@ -20,54 +20,69 @@ public class HugeInteger {
         if (val.length() == 0 || val.charAt(0) == '-' && val.length() == 1) {
             throw new NumberFormatException("Bad Input, not big enough");
         }
-        length = val.length();
+        length = val.length(); //set length
 
-        int i = 0;
+        int i = 0; //set for loop value
+
+        //check if the input is negative
         if (val.charAt(0) == '-') {
-            neg = true;
-            i = 1;
-            length -= 1;
+            neg = true; //set HugeInt as negative
+            i = 1; //skip negative sign in for loop
+            length -= 1; //adjust length
         }
+        //check if the values are ints and add to the string
         try {
             for (; i < val.length(); i++) {
                 Integer.parseInt(Character.toString(val.charAt(i)));
                 hugeIntSB.append(val.charAt(i));
             }
+            //if there is a non-int in the input string, catch error
         } catch (NumberFormatException e) {
             System.out.println("There was a non-int in your input (0-9)");
             throw e;
+            //should not happen, here in case something goes wrong
         } catch (Exception e) {
             System.out.println("Figure out how this happened");
             throw e;
         }
-        hugeInt = hugeIntSB.toString();
+        hugeInt = hugeIntSB.toString(); //save string
 
     }
 
     public HugeInteger(int n) {
+        //check if int is creater then 1, throws exception if not
         if (n < 1) {
             throw new NumberFormatException("Int must be greater then 0");
         }
+        //init stringbuilder and random
         StringBuilder hugeIntSB = new StringBuilder();
         Random rand = new Random();
+        //generate first rand num from 1-9
         hugeIntSB.append(Integer.toString(rand.nextInt(9) + 1));
+        //generate n random numbers from 0-9
         for (int i = 1; i < n; i++) {
             hugeIntSB.append(Integer.toString(rand.nextInt(10)));
         }
+        //set instance variables
         hugeInt = hugeIntSB.toString();
         length = n;
     }
 
     public HugeInteger add(HugeInteger h) {
+        //init SB for sum, and 2 HugeInts being added
         StringBuilder sumSB = new StringBuilder();
         StringBuilder hSB = new StringBuilder(h.hugeInt);
         StringBuilder thisSB = new StringBuilder(this.hugeInt);
 
+        //adds the numbers
         if (h.length >= this.length) {
+            //reverse the numbers since thats how you add on paper
             hSB.reverse();
             thisSB.reverse();
             boolean carry = false;
+            //if both numbers are positive
             if (!h.neg && !this.neg) {
+                //add numbers up to the length of the shorter number
                 for (int i = 0; i < this.length; i++) {
                     if (carry == true) {
                         sumSB.append((Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i))) + 1) % 10);
@@ -81,6 +96,7 @@ public class HugeInteger {
                     }
                 }
                 int count = this.length;
+                //go through remaining carry addition if it exists
                 while (carry == true) {
                     if (carry && count == h.length) {
                         sumSB.append("1");
@@ -88,10 +104,8 @@ public class HugeInteger {
                         break;
                     }
                     if (Integer.parseInt(Character.toString(hSB.charAt(count))) + 1 >= 10) {
-
                         sumSB.append((Integer.parseInt(Character.toString(hSB.charAt(count))) + 1) % 10);
                         count += 1;
-
                     } else {
                         sumSB.append(Integer.parseInt(Character.toString(hSB.charAt(count))) + 1);
                         count += 1;
@@ -99,11 +113,15 @@ public class HugeInteger {
                     }
                 }
                 sumSB.append(hSB.substring(count));
+                //(-a)+b = b-a, use subtract function
             } else if (h.neg && !this.neg) {
                 return this.subtract(h);
+                //a +(-b)= a-b, use subtract function
             } else if (!h.neg && this.neg) {
                 return h.subtract(this);
+                //if both numbers are negative
             } else {
+                //same as adding above
                 for (int i = 0; i < this.length; i++) {
                     if (carry == true) {
                         sumSB.append((Integer.parseInt(Character.toString(hSB.charAt(i))) + Integer.parseInt(Character.toString(thisSB.charAt(i))) + 1) % 10);
@@ -135,11 +153,13 @@ public class HugeInteger {
                     }
                 }
                 sumSB.append(hSB.substring(count));
-                sumSB.append("-");
+                sumSB.append("-"); //added a negative sign to the number
             }
             sumSB.reverse();
             return new HugeInteger(sumSB.toString());
+            //if this is bigger then h
         } else {
+            //the same as above
             hSB.reverse();
             thisSB.reverse();
             boolean carry = false;
@@ -165,10 +185,8 @@ public class HugeInteger {
                         break;
                     }
                     if (Integer.parseInt(Character.toString(thisSB.charAt(count))) + 1 >= 10) {
-
                         sumSB.append((Integer.parseInt(Character.toString(thisSB.charAt(count))) + 1) % 10);
                         count += 1;
-
                     } else {
                         sumSB.append(Integer.parseInt(Character.toString(thisSB.charAt(count))) + 1);
                         count += 1;
@@ -201,10 +219,8 @@ public class HugeInteger {
                         break;
                     }
                     if (Integer.parseInt(Character.toString(thisSB.charAt(count))) + 1 >= 10) {
-
                         sumSB.append((Integer.parseInt(Character.toString(thisSB.charAt(count))) + 1) % 10);
                         count += 1;
-
                     } else {
                         sumSB.append(Integer.parseInt(Character.toString(thisSB.charAt(count))) + 1);
                         count += 1;
@@ -219,7 +235,9 @@ public class HugeInteger {
         }
     }
 
+    //subtracts hugeInts (this - h)
     public HugeInteger subtract(HugeInteger h) {
+        //similar setup as add
         StringBuilder subSB = new StringBuilder();
         StringBuilder hSB = new StringBuilder(h.hugeInt);
         StringBuilder thisSB = new StringBuilder(this.hugeInt);
@@ -228,6 +246,7 @@ public class HugeInteger {
         boolean carry = false;
         if (this.length >= h.length) {
             if (!this.neg && !h.neg) {
+                //weird case were lengths are equal and h is bigger then this
                 if (h.length == this.length && this.compareTo(h) == -1) {
                     HugeInteger sub;
                     sub = h.subtract(this);
@@ -235,7 +254,7 @@ public class HugeInteger {
                     subSB.append(sub.hugeInt);
                     return new HugeInteger(subSB.toString());
                 }
-
+                //typical case of this-h
                 for (int i = 0; i < h.length; i++) {
                     if (carry && Integer.parseInt(Character.toString(thisSB.charAt(i + 1))) != 0) {
                         thisSB.replace(i, i, Integer.toString(Integer.parseInt(Character.toString(thisSB.charAt(i))) - 1));
@@ -245,20 +264,20 @@ public class HugeInteger {
                         subSB.append(Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))));
                     } else {
                         carry = true;
-                        if (Integer.parseInt(Character.toString(thisSB.charAt(i + 1))) == 0) { 
+                        if (Integer.parseInt(Character.toString(thisSB.charAt(i + 1))) == 0) {
                             thisSB.replace(i, i + 1, "9");
                             subSB.append(Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))) + 10);
                         } else {
                             carry = false;
                             thisSB.replace(i + 1, i + 2, Integer.toString(Integer.parseInt(Character.toString(thisSB.charAt(i + 1))) - 1));
                             subSB.append(Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))) + 10);
-
                         }
                     }
                 }
                 subSB.append(thisSB.substring(h.length));
                 subSB.reverse();
                 return new HugeInteger(subSB.toString());
+                // -this-h = -(this+h)
             } else if (this.neg && !h.neg) {
                 HugeInteger num1 = new HugeInteger(this.hugeInt);
                 HugeInteger num2 = new HugeInteger(h.hugeInt);
@@ -267,18 +286,22 @@ public class HugeInteger {
                 subSB.append("-");
                 subSB.append(sum.hugeInt);
                 return new HugeInteger(subSB.toString());
+                // this-(-h) = this+h
             } else if (!this.neg && h.neg) {
                 HugeInteger num1 = new HugeInteger(this.hugeInt);
                 HugeInteger num2 = new HugeInteger(h.hugeInt);
                 HugeInteger sum;
                 sum = num1.add(num2);
                 return sum;
+                //-this--h = h-this
             } else {
                 HugeInteger num1 = new HugeInteger(this.hugeInt);
                 HugeInteger num2 = new HugeInteger(h.hugeInt);
                 HugeInteger sum;
                 sum = num1.subtract(num2);
-                subSB.append("-");
+                if (this.compareTo(h) == -1) {
+                    subSB.append("-");
+                }
                 subSB.append(sum.hugeInt);
                 return new HugeInteger(subSB.toString());
             }
