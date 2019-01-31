@@ -5,9 +5,9 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger("-5");
-        HugeInteger y = new HugeInteger("-9");
-        System.out.println(y.add(x).neg);
+        HugeInteger x = new HugeInteger("5");
+        HugeInteger y = new HugeInteger("9");
+        System.out.println(y.add(x).hugeInt);
     }
 
     private String hugeInt;
@@ -139,12 +139,87 @@ public class HugeInteger {
                 sumSB.append(hSB.substring(count));
                 sumSB.append("-");
             }
-//TODO Both neg
-//TODO else other way around
+            sumSB.reverse();
+            return new HugeInteger(sumSB.toString());
+        } else {
+            hSB.reverse();
+            thisSB.reverse();
+            boolean carry = false;
+            if (!h.neg && !this.neg) {
+
+                //TODO CHECK IF THIS SHOULD BE HERE OR ABOVE
+                for (int i = 0; i < h.length; i++) {
+                    if (carry == true) {
+                        sumSB.append((Integer.parseInt(Character.toString(thisSB.charAt(i))) + Integer.parseInt(Character.toString(hSB.charAt(i))) + 1) % 10);
+                    } else {
+                        sumSB.append((Integer.parseInt(Character.toString(thisSB.charAt(i))) + Integer.parseInt(Character.toString(hSB.charAt(i)))) % 10);
+                    }
+                    if ((Integer) (Integer.parseInt(Character.toString(thisSB.charAt(i))) + Integer.parseInt(Character.toString(hSB.charAt(i))) + (carry ? 1 : 0)) / 10 != 0) {
+                        carry = true;
+                    } else {
+                        carry = false;
+                    }
+                }
+                int count = this.length;
+                while (carry == true) {
+                    if (carry && count == h.length) {
+                        sumSB.append("1");
+                        carry = false;
+                        break;
+                    }
+                    if (Integer.parseInt(Character.toString(thisSB.charAt(count))) + 1 >= 10) {
+
+                        sumSB.append((Integer.parseInt(Character.toString(thisSB.charAt(count))) + 1) % 10);
+                        count += 1;
+
+                    } else {
+                        sumSB.append(Integer.parseInt(Character.toString(thisSB.charAt(count))) + 1);
+                        count += 1;
+                        carry = false;
+                    }
+                }
+                sumSB.append(thisSB.substring(count));
+            } else if (h.neg && !this.neg) {
+                return this.subtract(h);
+            } else if (!h.neg && this.neg) {
+                return h.subtract(this);
+            } else {
+                for (int i = 0; i < this.length; i++) {
+                    if (carry == true) {
+                        sumSB.append((Integer.parseInt(Character.toString(thisSB.charAt(i))) + Integer.parseInt(Character.toString(hSB.charAt(i))) + 1) % 10);
+                    } else {
+                        sumSB.append((Integer.parseInt(Character.toString(thisSB.charAt(i))) + Integer.parseInt(Character.toString(hSB.charAt(i)))) % 10);
+                    }
+                    if ((Integer) (Integer.parseInt(Character.toString(thisSB.charAt(i))) + Integer.parseInt(Character.toString(hSB.charAt(i))) + (carry ? 1 : 0)) / 10 != 0) {
+                        carry = true;
+                    } else {
+                        carry = false;
+                    }
+                }
+                int count = this.length;
+                while (carry == true) {
+                    if (carry && count == h.length) {
+                        sumSB.append("1");
+                        carry = false;
+                        break;
+                    }
+                    if (Integer.parseInt(Character.toString(thisSB.charAt(count))) + 1 >= 10) {
+
+                        sumSB.append((Integer.parseInt(Character.toString(thisSB.charAt(count))) + 1) % 10);
+                        count += 1;
+
+                    } else {
+                        sumSB.append(Integer.parseInt(Character.toString(thisSB.charAt(count))) + 1);
+                        count += 1;
+                        carry = false;
+                    }
+                }
+                sumSB.append(thisSB.substring(count));
+                sumSB.append("-");
+            }
             sumSB.reverse();
             return new HugeInteger(sumSB.toString());
         }
-        return new HugeInteger(sumSB.toString());
     }
 
     public HugeInteger subtract(HugeInteger h) {
