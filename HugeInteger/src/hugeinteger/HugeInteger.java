@@ -5,11 +5,11 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger("-1506");
-        HugeInteger y = new HugeInteger("-67");
-        System.out.println(x.hugeInt);
-        System.out.println(y.hugeInt);
-        System.out.println(x.add(y).hugeInt);
+        HugeInteger x = new HugeInteger("123");
+        HugeInteger y = new HugeInteger("-20");
+        System.out.println(x.toString());
+        System.out.println(y.toString());
+        System.out.println(x.add(y).toString());
     }
 
     private String hugeInt; //Store the number
@@ -66,7 +66,7 @@ public class HugeInteger {
             hugeIntSB.append(Integer.toString(rand.nextInt(10)));
         }
         //set instance variables
-        neg = (rand.nextInt(2)==1);
+        neg = (rand.nextInt(2) == 1);
         hugeInt = hugeIntSB.toString();
         length = n;
     }
@@ -121,7 +121,8 @@ public class HugeInteger {
                 return this.subtract(h);
                 //a +(-b)= a-b, use subtract function
             } else if (!h.neg && this.neg) {
-                return h.subtract(this);
+                HugeInteger num1 = new HugeInteger(this.hugeInt);
+                return h.subtract(num1);
                 //if both numbers are negative
             } else {
                 //same as adding above
@@ -198,7 +199,8 @@ public class HugeInteger {
                 }
                 sumSB.append(thisSB.substring(count));
             } else if (h.neg && !this.neg) {
-                return this.subtract(h);
+                HugeInteger num1 = new HugeInteger(h.hugeInt);
+                return this.subtract(num1);
             } else if (!h.neg && this.neg) {
                 return h.subtract(this);
             } else {
@@ -399,6 +401,9 @@ public class HugeInteger {
     }
 
     public String toString() {
+        if (neg) {
+            return ("-" + this.hugeInt);
+        }
         return this.hugeInt;
     }
 
