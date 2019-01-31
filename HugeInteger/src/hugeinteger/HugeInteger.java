@@ -5,8 +5,8 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger("123");
-        HugeInteger y = new HugeInteger("-20");
+        HugeInteger x = new HugeInteger("20");
+        HugeInteger y = new HugeInteger("-123");
         System.out.println(x.toString());
         System.out.println(y.toString());
         System.out.println(x.add(y).toString());
@@ -118,7 +118,8 @@ public class HugeInteger {
                 sumSB.append(hSB.substring(count));
                 //(-a)+b = b-a, use subtract function
             } else if (h.neg && !this.neg) {
-                return this.subtract(h);
+                HugeInteger num1 = new HugeInteger(h.hugeInt);
+                return new HugeInteger("-" + num1.subtract(this).toString());
                 //a +(-b)= a-b, use subtract function
             } else if (!h.neg && this.neg) {
                 HugeInteger num1 = new HugeInteger(this.hugeInt);
@@ -202,7 +203,8 @@ public class HugeInteger {
                 HugeInteger num1 = new HugeInteger(h.hugeInt);
                 return this.subtract(num1);
             } else if (!h.neg && this.neg) {
-                return h.subtract(this);
+                HugeInteger num1 = new HugeInteger(this.hugeInt);
+                return new HugeInteger("-" + num1.subtract(h).toString());
             } else {
                 for (int i = 0; i < h.length; i++) {
                     if (carry == true) {
