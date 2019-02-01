@@ -5,11 +5,11 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger(100000);
-        HugeInteger y = new HugeInteger(100000);
-        x.toString();
-        y.toString();
-        x.add(y).toString();
+        HugeInteger x = new HugeInteger("-000000000000000000000000000000000000004488888888888888888888888888888885");
+        HugeInteger y = new HugeInteger("4444444444444444444444444444444444444444444444444448");
+        System.out.println(x.toString());
+        System.out.println(y.toString());
+        System.out.println(x.add(y).toString());
     }
 
     private String hugeInt; //Store the number
