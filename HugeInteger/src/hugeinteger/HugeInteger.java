@@ -6,7 +6,7 @@ public class HugeInteger {
 
     public static void main(String[] args) {
         HugeInteger x = new HugeInteger("70000");
-        HugeInteger y = new HugeInteger("9");
+        HugeInteger y = new HugeInteger("69999");
         x.toString();
         y.toString();
         System.out.println(x.subtract(y).toString());
@@ -31,6 +31,19 @@ public class HugeInteger {
             neg = true; //set HugeInt as negative
             i = 1; //skip negative sign in for loop
             length -= 1; //adjust length
+        }
+        //trimming the extra zeros
+        int j = i;
+        if (!neg) {
+            while (val.charAt(j) == '0' && length > 1) {
+                val = val.substring(1);
+                length -=1;
+            }
+        } else {
+            while (val.charAt(j) == '0' && length > 1) {
+                val = val.substring(0, j) + val.substring(j + 1);
+                                length -=1;
+            }
         }
         //check if the values are ints and add to the string
         try {
@@ -283,8 +296,6 @@ public class HugeInteger {
                                 }
                             }
                             subSB.append(Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))) + 10);
-                            System.out.println(Integer.toString(Character.getNumericValue(thisSB.charAt(j + 2)) - 1));
-
                             thisSB.replace(j + 2, j + 3, Integer.toString(Character.getNumericValue(thisSB.charAt(j + 2)) - 1));
                             for (int k = i + 1; k < j + 2; k++) {
                                 thisSB.replace(k, k + 1, "9");
@@ -350,7 +361,6 @@ public class HugeInteger {
                             carry = false;
                             thisSB.replace(i + 1, i + 2, Integer.toString(Integer.parseInt(Character.toString(thisSB.charAt(i + 1))) - 1));
                             subSB.append(Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))) + 10);
-
                         }
                     }
                 }
@@ -463,10 +473,8 @@ public class HugeInteger {
             if (this.compareTo(divide) == -1) {
                 flag = false;
             }
-
         }
         count = count.subtract(one);
-
         return count;
     }
 
