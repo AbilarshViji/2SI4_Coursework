@@ -5,7 +5,7 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger("70000");
+        HugeInteger x = new HugeInteger("2");
         HugeInteger y = new HugeInteger("69999");
         x.toString();
         y.toString();
@@ -37,12 +37,12 @@ public class HugeInteger {
         if (!neg) {
             while (val.charAt(j) == '0' && length > 1) {
                 val = val.substring(1);
-                length -=1;
+                length -= 1;
             }
         } else {
             while (val.charAt(j) == '0' && length > 1) {
                 val = val.substring(0, j) + val.substring(j + 1);
-                                length -=1;
+                length -= 1;
             }
         }
         //check if the values are ints and add to the string
@@ -345,6 +345,7 @@ public class HugeInteger {
             }
         } else {
             if (!this.neg && !h.neg) {
+                /*
                 for (int i = 0; i < h.length; i++) {
                     if (carry && Integer.parseInt(Character.toString(thisSB.charAt(i + 1))) != 0) {
                         thisSB.replace(i, i, Integer.toString(Integer.parseInt(Character.toString(thisSB.charAt(i))) - 1));
@@ -365,7 +366,13 @@ public class HugeInteger {
                     }
                 }
                 subSB.append(thisSB.substring(h.length));
-                subSB.reverse();
+                subSB.reverse();*/
+                HugeInteger num1 = new HugeInteger(this.hugeInt);
+                HugeInteger num2 = new HugeInteger(h.hugeInt);
+                HugeInteger sum;
+                sum = num2.subtract(num1);
+                subSB.append("-");
+                subSB.append(sum.hugeInt);
                 return new HugeInteger(subSB.toString());
             } else if (this.neg && !h.neg) {
                 HugeInteger num1 = new HugeInteger(this.hugeInt);
