@@ -5,11 +5,11 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger(100000);
-        HugeInteger y = new HugeInteger(100000);
+        HugeInteger x = new HugeInteger("999");
+        HugeInteger y = new HugeInteger("2");
         x.toString();
         y.toString();
-        x.add(y).toString();
+        System.out.println(x.divide(y).toString());
     }
 
     private String hugeInt; //Store the number
@@ -262,12 +262,9 @@ public class HugeInteger {
                     return new HugeInteger(subSB.toString());
                 }
                 //typical case of this-h
-              
+
                 for (int i = 0; i < h.length; i++) {
-                    if (carry && Integer.parseInt(Character.toString(thisSB.charAt(i + 1))) != 0) {
-                        thisSB.replace(i, i, Integer.toString(Integer.parseInt(Character.toString(thisSB.charAt(i))) - 1));
-                        carry = false;
-                    }
+
                     if (Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))) >= 0) {
                         //System.out.println(Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))));
                         subSB.append(Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))));
@@ -281,6 +278,10 @@ public class HugeInteger {
                             thisSB.replace(i + 1, i + 2, Integer.toString(Integer.parseInt(Character.toString(thisSB.charAt(i + 1))) - 1));
                             subSB.append(Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))) + 10);
                         }
+                    }
+                    if (carry && Integer.parseInt(Character.toString(thisSB.charAt(i + 1))) != 0) {
+                        thisSB.replace(i, i, Integer.toString(Integer.parseInt(Character.toString(thisSB.charAt(i + 1))) - 1));
+                        carry = false;
                     }
                 }
                 subSB.append(thisSB.substring(h.length));
@@ -411,18 +412,45 @@ public class HugeInteger {
         return this.hugeInt;
     }
 
-    /*
-public HugeInteger multiply(HugeInteger h) {
-
+    public HugeInteger multiply(HugeInteger h) {
+        HugeInteger multiply = new HugeInteger("0");
+        HugeInteger count = new HugeInteger("0");
+        HugeInteger one = new HugeInteger("1");
+        boolean flag = false;
+        while (!(count.hugeInt.equals(h.hugeInt))) {
+            multiply = multiply.add(this);
+            count = count.add(one);
+            flag = true;
+        }
+        if (flag == false) {
+            while (!(count.hugeInt.equals(h.hugeInt))) {
+                multiply = multiply.add(this);
+                count = count.subtract(one);
+                flag = true;
+            }
+        }
+        return multiply;
     }
 
     public HugeInteger divide(HugeInteger h) {
+        HugeInteger divide = new HugeInteger("0");
+        HugeInteger count = new HugeInteger("0");
+        HugeInteger one = new HugeInteger("1");
+        if (h.hugeInt.equals("0")) {
+            throw new NumberFormatException("Number cannot be 0");
+        }
+        boolean flag = true;
+        while (flag) {
+            count = count.add(one);
+            divide = divide.add(h);
+            if (this.compareTo(divide) == -1) {
+                flag = false;
+            }
 
+        }
+        count = count.subtract(one);
+
+        return count;
     }
 
-
-
-
-
-     */
 }
