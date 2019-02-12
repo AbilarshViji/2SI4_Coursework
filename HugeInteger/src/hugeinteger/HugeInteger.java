@@ -5,11 +5,11 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger("999");
-        HugeInteger y = new HugeInteger("2");
+        HugeInteger x = new HugeInteger("70000");
+        HugeInteger y = new HugeInteger("9");
         x.toString();
         y.toString();
-        System.out.println(x.divide(y).toString());
+        System.out.println(x.subtract(y).toString());
     }
 
     private String hugeInt; //Store the number
@@ -262,7 +262,8 @@ public class HugeInteger {
                     return new HugeInteger(subSB.toString());
                 }
                 //typical case of this-h
-
+                boolean multiCarry = false;
+                int j;
                 for (int i = 0; i < h.length; i++) {
 
                     if (Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))) >= 0) {
@@ -270,9 +271,25 @@ public class HugeInteger {
                         subSB.append(Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))));
                     } else {
                         carry = true;
+
                         if (Integer.parseInt(Character.toString(thisSB.charAt(i + 1))) == 0) {
-                            thisSB.replace(i, i + 1, "9");
+                            j = i;
+                            multiCarry = true;
+                            while (multiCarry) {
+                                if (Integer.parseInt(Character.toString(thisSB.charAt(j + 2))) == 0) {
+                                    j++;
+                                } else {
+                                    multiCarry = false;
+                                }
+                            }
                             subSB.append(Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))) + 10);
+                            System.out.println(Integer.toString(Character.getNumericValue(thisSB.charAt(j + 2)) - 1));
+
+                            thisSB.replace(j + 2, j + 3, Integer.toString(Character.getNumericValue(thisSB.charAt(j + 2)) - 1));
+                            for (int k = i + 1; k < j + 2; k++) {
+                                thisSB.replace(k, k + 1, "9");
+                            }
+                            carry = false;
                         } else {
                             carry = false;
                             thisSB.replace(i + 1, i + 2, Integer.toString(Integer.parseInt(Character.toString(thisSB.charAt(i + 1))) - 1));
