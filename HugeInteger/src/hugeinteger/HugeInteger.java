@@ -5,13 +5,13 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-         
-        HugeInteger x = new HugeInteger("7764177410");
-        HugeInteger y = new HugeInteger("-4065840083");
+
+        HugeInteger x = new HugeInteger("99999999");
+        HugeInteger y = new HugeInteger("99999999");
         x.toString();
         y.toString();
-        System.out.println(x.fastMultiply(y).toString());
-        timing();
+        System.out.println("\n" + x.fastMultiply(y).toString());
+        //timing();
     }
 
     private String hugeInt; //Store the number
@@ -450,17 +450,16 @@ public class HugeInteger {
 
     }
 
-    
-
     public HugeInteger fastMultiply(HugeInteger h) {
         HugeInteger localThis = this;
-        HugeInteger ten = new HugeInteger("10");
         boolean negative = false;
         int count = 0;
         int addZero = 0;
+        //if *0, it 0
         if (h.hugeInt.equals("0") || this.hugeInt.equals("0")) {
             return new HugeInteger("0");
         }
+        //neg stuff
         if (h.neg && this.neg) {
             h.neg = false;
             this.neg = false;
@@ -469,48 +468,56 @@ public class HugeInteger {
             h.neg = false;
             this.neg = false;
         }
+
+        //multiply
         if (localThis.hugeInt.length() <= 4 && h.hugeInt.length() <= 4) {
             String product = Integer.toString(Integer.parseInt(localThis.hugeInt) * Integer.parseInt(h.hugeInt));
             return new HugeInteger(product);
         }
+
+        //add zeros
         if (this.length > h.length) {
             addZero = this.length - h.length;
             for (int i = 0; i < addZero; i++) {
-                h = h.multiply(ten);
+                h = new HugeInteger(h.hugeInt + "0");
                 count++;
             }
         } else if (h.length > this.length) {
             addZero = h.length - this.length;
             for (int i = 0; i < addZero; i++) {
-                localThis = localThis.multiply(ten);
+                localThis = new HugeInteger(localThis.hugeInt + "0");
                 count++;
             }
         }
-        int mid = localThis.hugeInt.length() / 2;
-        HugeInteger A = new HugeInteger(localThis.hugeInt.substring(0, mid));
-        HugeInteger B = new HugeInteger(localThis.hugeInt.substring(mid));
-        mid = h.hugeInt.length() / 2;
-        HugeInteger C = new HugeInteger(h.hugeInt.substring(0, mid));
-        HugeInteger D = new HugeInteger(h.hugeInt.substring(mid));
 
+        int mid = localThis.length / 2;
+        HugeInteger A = new HugeInteger(localThis.hugeInt.substring(0, localThis.length - mid));
+        HugeInteger B = new HugeInteger(localThis.hugeInt.substring(localThis.length - mid));
+        mid = h.length / 2;
+        HugeInteger C = new HugeInteger(h.hugeInt.substring(0, h.length - mid));
+        HugeInteger D = new HugeInteger(h.hugeInt.substring(h.length - mid));
+        /* System.out.println(A.hugeInt);
+        System.out.println(B.hugeInt);
+        System.out.println(C.hugeInt);
+        System.out.println(D.hugeInt);*/
         HugeInteger AC = A.fastMultiply(C);
+        // System.out.println(AC.hugeInt);
         HugeInteger BD = B.fastMultiply(D);
-        HugeInteger ABCD = A.add(B).fastMultiply(C.add(D)).subtract(AC).subtract(BD);
-        for (int i = 0; i < h.hugeInt.length(); i++) {
-            AC = AC.multiply(ten);
-        }
-        for (int i = 0; i < mid; i++) {
-            ABCD = ABCD.multiply(ten);
-        }
-        HugeInteger divideNum = AC.add(ABCD).add(BD);
-        for (int i = 0; i < count; i++) {
-            divideNum = divideNum.divide(ten);
-        }
-        return AC.add(ABCD).add(BD);
-    }
+        // System.out.println(BD.hugeInt);
+        HugeInteger ABCD = ((A.add(B)).fastMultiply(C.add(D))).subtract(AC).subtract(BD);
+        // System.out.println(ABCD.hugeInt);
 
-    public HugeInteger fM(HugeInteger h) {
-        return this.fastMultiply(h);
+        for (int i = 0; i < h.length; i++) {
+            AC = new HugeInteger(AC.hugeInt + "0");
+        }
+        for (int i = 0; i < h.length - mid; i++) {
+            ABCD = new HugeInteger(ABCD.hugeInt + "0");
+        }
+
+        HugeInteger divideNum = AC.add(ABCD.add(BD));
+        divideNum = new HugeInteger(divideNum.hugeInt.substring(0, divideNum.length - count-1));
+        divideNum.neg = negative;
+        return divideNum;
     }
 
     public HugeInteger divide(HugeInteger h) {
