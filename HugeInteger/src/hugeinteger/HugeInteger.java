@@ -5,11 +5,13 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger("999999999999");
-        HugeInteger y = new HugeInteger("99999");
+         
+        HugeInteger x = new HugeInteger("7764177410");
+        HugeInteger y = new HugeInteger("-4065840083");
         x.toString();
         y.toString();
         System.out.println(x.fastMultiply(y).toString());
+        timing();
     }
 
     private String hugeInt; //Store the number
@@ -132,7 +134,7 @@ public class HugeInteger {
                 //(-a)+b = b-a, use subtract function
             } else if (h.neg && !this.neg) {
                 HugeInteger num1 = new HugeInteger(h.hugeInt);
-                return new HugeInteger("-" + num1.subtract(this).toString());
+                return new HugeInteger(this.subtract(num1).toString());
                 //a +(-b)= a-b, use subtract function
             } else if (!h.neg && this.neg) {
                 HugeInteger num1 = new HugeInteger(this.hugeInt);
@@ -427,21 +429,28 @@ public class HugeInteger {
         HugeInteger multiply = new HugeInteger("0");
         HugeInteger count = new HugeInteger("0");
         HugeInteger one = new HugeInteger("1");
-        boolean flag = false;
-        while (!(count.hugeInt.equals(h.hugeInt))) {
-            multiply = multiply.add(this);
-            count = count.add(one);
-            flag = true;
-        }
-        if (flag == false) {
+        HugeInteger num1, num2, ans;
+        if (this.neg && h.neg) {
+            num1 = new HugeInteger(this.hugeInt);
+            num2 = new HugeInteger(h.hugeInt);
+            return num1.multiply(num2);
+        } else if (this.neg || h.neg) {
+            num1 = new HugeInteger(this.hugeInt);
+            num2 = new HugeInteger(h.hugeInt);
+            ans = num1.multiply(num2);
+            ans.neg = true;
+            return ans;
+        } else {
             while (!(count.hugeInt.equals(h.hugeInt))) {
                 multiply = multiply.add(this);
-                count = count.subtract(one);
-                flag = true;
+                count = count.add(one);
             }
+            return multiply;
         }
-        return multiply;
+
     }
+
+    
 
     public HugeInteger fastMultiply(HugeInteger h) {
         HugeInteger localThis = this;
@@ -484,7 +493,7 @@ public class HugeInteger {
         HugeInteger C = new HugeInteger(h.hugeInt.substring(0, mid));
         HugeInteger D = new HugeInteger(h.hugeInt.substring(mid));
 
-        HugeInteger AC = A.fM(C);
+        HugeInteger AC = A.fastMultiply(C);
         HugeInteger BD = B.fastMultiply(D);
         HugeInteger ABCD = A.add(B).fastMultiply(C.add(D)).subtract(AC).subtract(BD);
         for (int i = 0; i < h.hugeInt.length(); i++) {
@@ -499,9 +508,11 @@ public class HugeInteger {
         }
         return AC.add(ABCD).add(BD);
     }
-    public HugeInteger fM(HugeInteger h){
+
+    public HugeInteger fM(HugeInteger h) {
         return this.fastMultiply(h);
     }
+
     public HugeInteger divide(HugeInteger h) {
         HugeInteger divide = new HugeInteger("0");
         HugeInteger count = new HugeInteger("0");
@@ -528,5 +539,28 @@ public class HugeInteger {
             count = count.subtract(one);
             return count;
         }
+    }
+
+    public static void timing() {
+        HugeInteger huge1, huge2, huge3;
+        long startTime, endTime;
+        double runTime = 0.0;
+        int MAXNUMINTS = 10;
+        int MAXRUN = 50;
+        int n = 5;
+        for (int numInts = 0; numInts < MAXNUMINTS; numInts++) {
+            huge1 = new HugeInteger(n); //creates a random integer of n digits
+            huge2 = new HugeInteger(n); //creates a random integer of n digits
+            //System.out.println(huge1.toString());
+            //System.out.println(huge2.toString());
+            startTime = System.currentTimeMillis();
+            for (int numRun = 0; numRun < MAXRUN; numRun++) {
+                huge3 = huge1.fastMultiply(huge2);
+            }
+            endTime = System.currentTimeMillis();
+            runTime += (double) (endTime - startTime) / ((double) MAXRUN);
+        }
+        runTime = runTime / ((double) MAXNUMINTS);
+        System.out.println(runTime);
     }
 }
