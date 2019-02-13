@@ -5,11 +5,11 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger("2");
-        HugeInteger y = new HugeInteger("69999");
+        HugeInteger x = new HugeInteger("999999999999");
+        HugeInteger y = new HugeInteger("99999");
         x.toString();
         y.toString();
-        System.out.println(x.subtract(y).toString());
+        System.out.println(x.fastMultiply(y).toString());
     }
 
     private String hugeInt; //Store the number
@@ -345,28 +345,6 @@ public class HugeInteger {
             }
         } else {
             if (!this.neg && !h.neg) {
-                /*
-                for (int i = 0; i < h.length; i++) {
-                    if (carry && Integer.parseInt(Character.toString(thisSB.charAt(i + 1))) != 0) {
-                        thisSB.replace(i, i, Integer.toString(Integer.parseInt(Character.toString(thisSB.charAt(i))) - 1));
-                        carry = false;
-                    }
-                    if (Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))) >= 0) {
-                        subSB.append(Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))));
-                    } else {
-                        carry = true;
-                        if (Integer.parseInt(Character.toString(thisSB.charAt(i + 1))) == 0) {
-                            thisSB.replace(i, i + 1, "9");
-                            subSB.append(Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))) + 10);
-                        } else {
-                            carry = false;
-                            thisSB.replace(i + 1, i + 2, Integer.toString(Integer.parseInt(Character.toString(thisSB.charAt(i + 1))) - 1));
-                            subSB.append(Integer.parseInt(Character.toString(thisSB.charAt(i))) - Integer.parseInt(Character.toString(hSB.charAt(i))) + 10);
-                        }
-                    }
-                }
-                subSB.append(thisSB.substring(h.length));
-                subSB.reverse();*/
                 HugeInteger num1 = new HugeInteger(this.hugeInt);
                 HugeInteger num2 = new HugeInteger(h.hugeInt);
                 HugeInteger sum;
@@ -398,7 +376,6 @@ public class HugeInteger {
                 return new HugeInteger(subSB.toString());
             }
         }
-
     }
 
     public int compareTo(HugeInteger h) {
@@ -466,6 +443,65 @@ public class HugeInteger {
         return multiply;
     }
 
+    public HugeInteger fastMultiply(HugeInteger h) {
+        HugeInteger localThis = this;
+        HugeInteger ten = new HugeInteger("10");
+        boolean negative = false;
+        int count = 0;
+        int addZero = 0;
+        if (h.hugeInt.equals("0") || this.hugeInt.equals("0")) {
+            return new HugeInteger("0");
+        }
+        if (h.neg && this.neg) {
+            h.neg = false;
+            this.neg = false;
+        } else if (h.neg || this.neg) {
+            negative = true;
+            h.neg = false;
+            this.neg = false;
+        }
+        if (localThis.hugeInt.length() <= 4 && h.hugeInt.length() <= 4) {
+            String product = Integer.toString(Integer.parseInt(localThis.hugeInt) * Integer.parseInt(h.hugeInt));
+            return new HugeInteger(product);
+        }
+        if (this.length > h.length) {
+            addZero = this.length - h.length;
+            for (int i = 0; i < addZero; i++) {
+                h = h.multiply(ten);
+                count++;
+            }
+        } else if (h.length > this.length) {
+            addZero = h.length - this.length;
+            for (int i = 0; i < addZero; i++) {
+                localThis = localThis.multiply(ten);
+                count++;
+            }
+        }
+        int mid = localThis.hugeInt.length() / 2;
+        HugeInteger A = new HugeInteger(localThis.hugeInt.substring(0, mid));
+        HugeInteger B = new HugeInteger(localThis.hugeInt.substring(mid));
+        mid = h.hugeInt.length() / 2;
+        HugeInteger C = new HugeInteger(h.hugeInt.substring(0, mid));
+        HugeInteger D = new HugeInteger(h.hugeInt.substring(mid));
+
+        HugeInteger AC = A.fM(C);
+        HugeInteger BD = B.fastMultiply(D);
+        HugeInteger ABCD = A.add(B).fastMultiply(C.add(D)).subtract(AC).subtract(BD);
+        for (int i = 0; i < h.hugeInt.length(); i++) {
+            AC = AC.multiply(ten);
+        }
+        for (int i = 0; i < mid; i++) {
+            ABCD = ABCD.multiply(ten);
+        }
+        HugeInteger divideNum = AC.add(ABCD).add(BD);
+        for (int i = 0; i < count; i++) {
+            divideNum = divideNum.divide(ten);
+        }
+        return AC.add(ABCD).add(BD);
+    }
+    public HugeInteger fM(HugeInteger h){
+        return this.fastMultiply(h);
+    }
     public HugeInteger divide(HugeInteger h) {
         HugeInteger divide = new HugeInteger("0");
         HugeInteger count = new HugeInteger("0");
@@ -473,16 +509,24 @@ public class HugeInteger {
         if (h.hugeInt.equals("0")) {
             throw new NumberFormatException("Number cannot be 0");
         }
-        boolean flag = true;
-        while (flag) {
-            count = count.add(one);
-            divide = divide.add(h);
-            if (this.compareTo(divide) == -1) {
-                flag = false;
+        HugeInteger num1, num2, ans;
+        if (this.neg && h.neg) {
+            num1 = new HugeInteger(this.hugeInt);
+            num2 = new HugeInteger(h.hugeInt);
+            return num1.divide(num2);
+        } else if (this.neg || h.neg) {
+            num1 = new HugeInteger(this.hugeInt);
+            num2 = new HugeInteger(h.hugeInt);
+            ans = num1.divide(num2);
+            ans.neg = true;
+            return ans;
+        } else {
+            while (this.compareTo(divide) == -1) {
+                count = count.add(one);
+                divide = divide.add(h);
             }
+            count = count.subtract(one);
+            return count;
         }
-        count = count.subtract(one);
-        return count;
     }
-
 }
