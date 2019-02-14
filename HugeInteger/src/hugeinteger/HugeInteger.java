@@ -6,11 +6,11 @@ public class HugeInteger {
 
     public static void main(String[] args) {
 
-        HugeInteger x = new HugeInteger("99999999");
-        HugeInteger y = new HugeInteger("99999999");
-        x.toString();
-        y.toString();
-        System.out.println("\n" + x.fastMultiply(y).toString());
+        HugeInteger x = new HugeInteger(5);
+        HugeInteger y = new HugeInteger(5);
+        System.out.println(x.toString());
+        System.out.println(y.toString());
+        System.out.println("\n" + x.divide(y).toString());
         //timing();
     }
 
@@ -539,7 +539,7 @@ public class HugeInteger {
             ans.neg = true;
             return ans;
         } else {
-            while (this.compareTo(divide) == -1) {
+            while (this.compareTo(divide) == 1) {
                 count = count.add(one);
                 divide = divide.add(h);
             }
