@@ -7,7 +7,7 @@ public class HugeInteger {
     public static void main(String[] args) {
 
         HugeInteger x = new HugeInteger("99999");
-        HugeInteger y = new HugeInteger("99999");
+        HugeInteger y = new HugeInteger("99");
         x.toString();
         y.toString();
         System.out.println("\n" + x.fastMultiply(y).toString());
@@ -452,7 +452,7 @@ public class HugeInteger {
 
     public HugeInteger fastMultiply(HugeInteger h) {
         HugeInteger localThis = this;
-        HugeInteger divideNum = new HugeInteger("1");
+        HugeInteger divideNum;
         boolean negative = false;
         int addZero;
 
@@ -492,6 +492,7 @@ public class HugeInteger {
         mid = h.hugeInt.length() / 2;
         HugeInteger C = new HugeInteger(h.hugeInt.substring(0, mid));
         HugeInteger D = new HugeInteger(h.hugeInt.substring(mid));
+        
         HugeInteger AC = A.fastMultiply(C);
         HugeInteger BD = B.fastMultiply(D);
         HugeInteger ABCD = ((A.add(B)).fastMultiply(C.add(D))).subtract(AC).subtract(BD);
@@ -500,7 +501,7 @@ public class HugeInteger {
             AC.hugeInt = AC.hugeInt + 0;
             AC.length++;
         }
-        for (int i = 0; i < A.hugeInt.length() - mid; i++) {
+        for (int i = 0; i < A.hugeInt.length(); i++) {
             ABCD.hugeInt = ABCD.hugeInt + 0;
             ABCD.length++;
         }
