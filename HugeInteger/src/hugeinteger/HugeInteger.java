@@ -6,12 +6,12 @@ public class HugeInteger {
 
     public static void main(String[] args) {
 
-        HugeInteger x = new HugeInteger("99999");
-        HugeInteger y = new HugeInteger("99");
+        HugeInteger x = new HugeInteger(10000);
+        HugeInteger y = new HugeInteger(10000);
         x.toString();
         y.toString();
-        System.out.println("\n" + x.fastMultiply(y).toString());
-        //timing();
+       // System.out.println("\n" + x.fastMultiply(y).toString());
+        timing();
     }
 
     private String hugeInt; //Store the number
@@ -497,11 +497,11 @@ public class HugeInteger {
         HugeInteger BD = B.fastMultiply(D);
         HugeInteger ABCD = ((A.add(B)).fastMultiply(C.add(D))).subtract(AC).subtract(BD);
 
-        for (int i = 0; i < 2 * A.hugeInt.length(); i++) {
+        for (int i = 0; i < 2 * D.hugeInt.length(); i++) {
             AC.hugeInt = AC.hugeInt + 0;
             AC.length++;
         }
-        for (int i = 0; i < A.hugeInt.length(); i++) {
+        for (int i = 0; i < D.hugeInt.length(); i++) {
             ABCD.hugeInt = ABCD.hugeInt + 0;
             ABCD.length++;
         }
@@ -543,9 +543,9 @@ public class HugeInteger {
         HugeInteger huge1, huge2, huge3;
         long startTime, endTime;
         double runTime = 0.0;
-        int MAXNUMINTS = 10;
+        int MAXNUMINTS = 10000000;
         int MAXRUN = 50;
-        int n = 5;
+        int n = 5000;
         for (int numInts = 0; numInts < MAXNUMINTS; numInts++) {
             huge1 = new HugeInteger(n); //creates a random integer of n digits
             huge2 = new HugeInteger(n); //creates a random integer of n digits
