@@ -6,12 +6,12 @@ public class HugeInteger {
 
     public static void main(String[] args) {
 
-        HugeInteger x = new HugeInteger(10000);
-        HugeInteger y = new HugeInteger(10000);
+        HugeInteger x = new HugeInteger(100);
+        HugeInteger y = new HugeInteger(100);
         x.toString();
         y.toString();
-       // System.out.println("\n" + x.fastMultiply(y).toString());
-        timing();
+        System.out.println("\n" + x.fastMultiply(y).toString());
+       // timing();
     }
 
     private String hugeInt; //Store the number
@@ -497,11 +497,11 @@ public class HugeInteger {
         HugeInteger BD = B.fastMultiply(D);
         HugeInteger ABCD = ((A.add(B)).fastMultiply(C.add(D))).subtract(AC).subtract(BD);
 
-        for (int i = 0; i < 2 * D.hugeInt.length(); i++) {
+        for (int i = 0; i < 2 * C.hugeInt.length(); i++) {
             AC.hugeInt = AC.hugeInt + 0;
             AC.length++;
         }
-        for (int i = 0; i < D.hugeInt.length(); i++) {
+        for (int i = 0; i < C.hugeInt.length(); i++) {
             ABCD.hugeInt = ABCD.hugeInt + 0;
             ABCD.length++;
         }
@@ -530,7 +530,7 @@ public class HugeInteger {
             ans.neg = true;
             return ans;
         } else {
-            while (this.compareTo(divide) == -1) {
+            while (this.compareTo(divide) == 1) {
                 count = count.add(one);
                 divide = divide.add(h);
             }
