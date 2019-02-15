@@ -1,16 +1,17 @@
 package hugeinteger;
 
+import java.math.BigInteger;
 import java.util.Random;
 
 public class HugeInteger {
 
     public static void main(String[] args) {
-        HugeInteger x = new HugeInteger(100);
-        HugeInteger y = new HugeInteger(100);
-        x.toString();
-        y.toString();
-        System.out.println("\n" + x.fastMultiply(y).toString());
-       // timing();
+        //  HugeInteger x = new HugeInteger(100);
+        // HugeInteger y = new HugeInteger(100);
+        // x.toString();
+        // y.toString();
+        //System.out.println("\n" + x.fastMultiply(y).toString());
+        timing();
     }
 
     private String hugeInt; //Store the number
@@ -491,7 +492,7 @@ public class HugeInteger {
         mid = h.hugeInt.length() / 2;
         HugeInteger C = new HugeInteger(h.hugeInt.substring(0, mid));
         HugeInteger D = new HugeInteger(h.hugeInt.substring(mid));
-        
+
         HugeInteger AC = A.fastMultiply(C);
         HugeInteger BD = B.fastMultiply(D);
         HugeInteger ABCD = ((A.add(B)).fastMultiply(C.add(D))).subtract(AC).subtract(BD);
@@ -540,11 +541,13 @@ public class HugeInteger {
 
     public static void timing() {
         HugeInteger huge1, huge2, huge3;
-        long startTime, endTime;
+        BigInteger big1, big2, big3;
+        long startTime, endTime, startTime2, endTime2;
         double runTime = 0.0;
-        int MAXNUMINTS = 10000000;
-        int MAXRUN = 50;
-        int n = 5000;
+        double runTime2 = 0.0;
+        int MAXNUMINTS = 500;
+        int MAXRUN = 100;
+        int n = 10000;
         for (int numInts = 0; numInts < MAXNUMINTS; numInts++) {
             huge1 = new HugeInteger(n); //creates a random integer of n digits
             huge2 = new HugeInteger(n); //creates a random integer of n digits
@@ -552,12 +555,26 @@ public class HugeInteger {
             //System.out.println(huge2.toString());
             startTime = System.currentTimeMillis();
             for (int numRun = 0; numRun < MAXRUN; numRun++) {
-                huge3 = huge1.fastMultiply(huge2);
+                huge3 = huge1.add(huge2);
             }
             endTime = System.currentTimeMillis();
+            big1 = new BigInteger(huge1.toString());
+            big2 = new BigInteger(huge2.toString());
+            System.out.println(numInts);
+            startTime2 = System.currentTimeMillis();
+            for (int numRun = 0; numRun < MAXRUN; numRun++) {
+                big3 = big1.add(big2);
+            }
+            endTime2 = System.currentTimeMillis();
+            runTime2 += (double) (endTime2 - startTime2) / ((double) MAXRUN);
+
             runTime += (double) (endTime - startTime) / ((double) MAXRUN);
         }
         runTime = runTime / ((double) MAXNUMINTS);
+        runTime2 = runTime2 / ((double) MAXNUMINTS);
+
         System.out.println(runTime);
+        System.out.println(runTime2);
+
     }
 }
