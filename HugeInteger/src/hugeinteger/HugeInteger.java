@@ -5,7 +5,6 @@ import java.util.Random;
 public class HugeInteger {
 
     public static void main(String[] args) {
-
         HugeInteger x = new HugeInteger(100);
         HugeInteger y = new HugeInteger(100);
         x.toString();
