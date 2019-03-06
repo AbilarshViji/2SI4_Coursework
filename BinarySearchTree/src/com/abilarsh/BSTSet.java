@@ -4,7 +4,7 @@ public class BSTSet {
     private TNode root;
     
     public BSTSet(){
-        
+        root = null;
     }
     
     public BSTSet(int [] input){
@@ -22,11 +22,7 @@ public class BSTSet {
     public boolean remove(int v){
         
     }
-    
-    public boolean remove(int v){
-        
-    }
-    
+
     public BSTSet union(BSTSet s){
         
     }
@@ -39,7 +35,7 @@ public class BSTSet {
         
     }
     
-    public int site(){
+    public int size(){
         
     }
     
