@@ -134,15 +134,13 @@ public class BSTSet {
     }
 
     public BSTSet difference(BSTSet s) {
-        int[] thisArray = this.arrayTree();
-        int[] sArray = s.arrayTree();
-        BSTSet diff = new BSTSet();
-        for (int i = 0; i < thisArray.length; i++) {
-            if (!(s.isIn(thisArray[i]))) {
-                diff.add(thisArray[i]);
-            }
+        BSTSet union = this.union(s);
+        BSTSet intersect = this.intersection(s);
+        int[] intArr = intersect.arrayTree();
+        for (int i = 0; i < intArr.length; i++) {
+            union.remove(intArr[i]);
         }
-        return diff;
+        return union;
     }
 
     public int size() {
@@ -235,7 +233,7 @@ public class BSTSet {
         while (t != null || stack.size > 0) {
             while (t != null) {
                 stack.push(t);
-                System.out.print(t.element);
+                System.out.print(t.element + ", ");
                 t = t.left;
             }
             t = stack.pop();

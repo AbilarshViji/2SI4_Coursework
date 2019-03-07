@@ -31,5 +31,6 @@ public class Main {
         c.printBSTSet();
         c = a.difference(b);
         c.printBSTSet();
+        c.printNonRec();
     }
 }
