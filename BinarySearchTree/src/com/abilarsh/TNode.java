@@ -4,9 +4,10 @@ public class TNode {
     int element;
     TNode left;
     TNode right;
-    TNode (int i, TNode one, TNode r){
+
+    TNode(int i, TNode l, TNode r) {
         element = i;
-        left = one;
+        left = l;
         right = r;
     }
 }

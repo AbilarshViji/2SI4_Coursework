@@ -7,7 +7,7 @@ public class MyStack {
     StackNode top; //stores the top of the stack
 
 
-    public MyStack(){
+    public MyStack() {
         this.top = null;
         this.size = 0;
     }
@@ -42,11 +42,11 @@ public class MyStack {
         return temp;
     }
 
-    int top(){
+    int top() {
         return this.top.element.element;
     }
 
-    int size(){
+    int size() {
         return this.size;
     }
 }
