@@ -110,6 +110,9 @@ public class BSTSet {
     }
 
     public BSTSet intersection(BSTSet s) {
+        if (this.size() == 0 || s.size() == 0) {
+            return new BSTSet();
+        }
         int[] thisArray = this.arrayTree();
         int[] sArray = s.arrayTree();
         sort(thisArray);
@@ -204,25 +207,41 @@ public class BSTSet {
         return tree;
     }
 
-    public void printBSTset() {
+    public void printBSTSet() {
         if (root == null) {
             System.out.println("This set is empty");
         } else {
             System.out.println("the set elements are: ");
-            printBSTset(root);
+            printBSTSet(root);
             System.out.println("\n");
         }
     }
 
-    private void printBSTset(TNode t) {
+    private void printBSTSet(TNode t) {
         if (t != null) {
-            printBSTset(t.left);
+            printBSTSet(t.left);
             System.out.print(" " + t.element + ", ");
-            printBSTset(t.right);
+            printBSTSet(t.right);
         }
     }
 
     public void printNonRec() {
-        // TODO: 25/02/19 This method is nonrecusrive and uses a stack to inplement the inorder traversal 
+        MyStack stack = new MyStack();
+        if (this.root == null) {
+            System.out.println("This set is empty");
+        }
+        TNode t = this.root;
+        System.out.println("the set elements are: ");
+        while (t != null || stack.size > 0) {
+            while (t != null) {
+                stack.push(t);
+                System.out.print(t.element);
+                t = t.left;
+            }
+            t = stack.pop();
+
+            t = t.right;
+
+        }
     }
 }
