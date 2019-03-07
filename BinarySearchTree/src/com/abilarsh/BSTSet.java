@@ -75,48 +75,88 @@ public class BSTSet {
         }
     }
 
-
     public boolean remove(int v) {
-        TNode current = root;
-        TNode prev = root;
-        while (current.element != v) {
-            prev = current;
-            if (v > current.element) {
-                current = current.right;
-            } else if (v < current.element) {
-                current = current.left;
+        if (!(this.isIn(v))) {
+            return false;
+        }
+        int[] tree = this.arrayTree();
+        int[] delTree = new int[tree.length - 1];
+        int j = 0;
+        for (int i = 0; i < tree.length; i++) {
+            if (tree[i] != v) {
+                delTree[j] = tree[i];
+                j++;
             }
         }
-        if (current.element == v) {
-            if (prev.element > v) {
-                prev.left = null;
-            } else if (prev.element < v) {
-                prev.right = null;
-            } else {
-                //TODO its gonna break the tree
-            }
-            return true;
+        sort(delTree);
+        this.root = new TNode(delTree[delTree.length / 2], null, null);
+        for (int i = 0; i < delTree.length; i++) {
+            add(delTree[i]);
         }
-        return false;
+        return true;
     }
 
-    /*
-        public BSTSet union(BSTSet s) {
-
+    public BSTSet union(BSTSet s) {
+        int[] thisArray = this.arrayTree();
+        int[] sArray = s.arrayTree();
+        int union[] = new int[thisArray.length + sArray.length];
+        for (int i = 0; i < thisArray.length; i++) {
+            union[i] = thisArray[i];
         }
-
-        public BSTSet intersection(BSTSet s) {
-
+        for (int i = thisArray.length; i < thisArray.length + sArray.length; i++) {
+            union[i] = sArray[i - thisArray.length];
         }
+        return new BSTSet(union);
+    }
 
-        public BSTSet difference(BSTSet s) {
-
+    public BSTSet intersection(BSTSet s) {
+        int[] thisArray = this.arrayTree();
+        int[] sArray = s.arrayTree();
+        sort(thisArray);
+        sort(sArray);
+        BSTSet intersect = new BSTSet();
+        int i = 0, j = 0;
+        while (i < thisArray.length && j < sArray.length) {
+            if (thisArray[i] < sArray[j]) {
+                i++;
+            } else if (sArray[j] < thisArray[i]) {
+                j++;
+            } else {
+                intersect.add(sArray[j]);
+                i++;
+                j++;
+            }
         }
+        return intersect;
+    }
 
-        public int size() {
-
+    public BSTSet difference(BSTSet s) {
+        int[] thisArray = this.arrayTree();
+        int[] sArray = s.arrayTree();
+        BSTSet diff = new BSTSet();
+        for (int i = 0; i < thisArray.length; i++) {
+            if (!(s.isIn(thisArray[i]))) {
+                diff.add(thisArray[i]);
+            }
         }
-    */
+        return diff;
+    }
+
+    public int size() {
+        TNode t = root;
+        return size(t);
+    }
+
+    private int size(TNode t) {
+        int i = 0;
+        if (t != null) {
+            i += size(t.left);
+            i++;
+            i += size(t.right);
+        }
+        return i;
+    }
+
     public int height() {
         TNode t = root;
         if (root == null) {
@@ -141,9 +181,32 @@ public class BSTSet {
         }
     }
 
+    public int[] arrayTree() {
+        MyStack stack = new MyStack();
+        int[] tree = new int[size()];
+        int i = 0;
+        if (this.root == null) {
+            return null;
+        }
+        TNode t = this.root;
+        while (t != null || stack.size > 0) {
+            while (t != null) {
+                stack.push(t);
+                tree[i] = t.element;
+                i++;
+                t = t.left;
+            }
+            t = stack.pop();
+
+            t = t.right;
+
+        }
+        return tree;
+    }
+
     public void printBSTset() {
         if (root == null) {
-            System.out.println("This set it empty");
+            System.out.println("This set is empty");
         } else {
             System.out.println("the set elements are: ");
             printBSTset(root);
@@ -151,23 +214,10 @@ public class BSTSet {
         }
     }
 
-    /*
-        public int[] list(TNode t) {
-            int[] tree = new int[size()];
-            int i = 0;
-            if (t != null) {
-                list(t.left);
-                tree[i] = t.element;
-                i++;
-                list(t.right);
-            }
-            return tree;
-        }
-    */
     private void printBSTset(TNode t) {
         if (t != null) {
             printBSTset(t.left);
-            System.out.println(" " + t.element + ", ");
+            System.out.print(" " + t.element + ", ");
             printBSTset(t.right);
         }
     }
