@@ -138,10 +138,18 @@ public class BSTSet {
         int[] sArray = s.arrayTree();
         BSTSet diff = new BSTSet();
         int forloop = thisArray.length;
+       // boolean big = thisArray.length > sArray.length ? true : false;
         for (int i = 0; i < forloop; i++) {
+          //  if (big) {
                 if (!(s.isIn(thisArray[i]))) {
                     diff.add(thisArray[i]);
                 }
+      //      }
+         /*   else{
+                if (!(this.isIn(sArray[i]))) {
+                    diff.add(sArray[i]);
+                }
+            }*/
         }
         return diff;
     }
