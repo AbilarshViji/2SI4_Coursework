@@ -14,16 +14,17 @@ public class Main {
         //  System.out.println("The number of keys: " + test.getKeys());
         // System.out.println("The average number of probes: " + avgProbes(test));
         //System.out.println("The average number of probes: "+avgProbesSim());
-        avgProbesSim();
+        successProbeSim();
     }
 
-    public static void avgProbesSim() {
+    public static void successProbeSim() {
         Random rand = new Random();
         int insert;
         HashTableLin linTest;
         HashTableQuad quadTest;
         double linProbe = 0;
         double quadProbe = 0;
+        System.out.println("λ   Linear    Quadratic");
         for (int i = 1; i < 10; i++) {
             linProbe = 0;
             quadProbe = 0;
@@ -47,7 +48,7 @@ public class Main {
             }
             linProbe = linProbe / (100000 * 100);
             quadProbe = quadProbe / (100000 * 100);
-            System.out.println(linProbe + " " + quadProbe);
+            System.out.println(i / 10.0 + " " + linProbe + " " + quadProbe);
         }
     }
 

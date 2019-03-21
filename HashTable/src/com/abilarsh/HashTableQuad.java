@@ -75,13 +75,9 @@ public class HashTableQuad {
             table[index] = n;
         } else {
             while (table[index] != null) {
-                index = index - (count * count) + ((count + 1) * (count + 1)) - extra;
+                index = (index - (count * count) + ((count + 1) * (count + 1))) % size;
                 count++;
                 probe++;
-                if (index >= (size - 1)) {
-                    extra = size - (n % size) - 1;
-                    index = (count + 1) * (count + 1);
-                }
             }
             table[index] = n;
         }
@@ -110,17 +106,12 @@ public class HashTableQuad {
     public boolean isIn(int n) { //n
         int index = n % size;
         int count = 0;
-        int extra = 0;
         while (table[index] != null) {
             if (table[index] == n) {
                 return true;
             } else {
-                index = index - (count * count) + ((count + 1) * (count + 1)) - extra;
+                index = (index - (count * count) + ((count + 1) * (count + 1))) % size;
                 count++;
-                if (index >= (size - 1)) {
-                    //extra = size - (n % size) - 1;
-                    index = (count + 1) * (count + 1);
-                }
             }
         }
         return false;
