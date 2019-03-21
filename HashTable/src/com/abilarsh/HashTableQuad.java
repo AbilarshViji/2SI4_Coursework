@@ -43,15 +43,13 @@ public class HashTableQuad {
         }
         int index = n % size;
         int count = 0;
-        int extra = 0;
         if (table[index] == null) {
             table[index] = n;
         } else {
             while (table[index] != null) {
-                index = index - (count * count) + ((count + 1) * (count + 1)) - extra;
+                index = (index - (count * count) + ((count + 1) * (count + 1))) % size;
                 count++;
                 if (index >= (size - 1)) {
-                    extra = size - (n % size) - 1;
                     index = (count + 1) * (count + 1);
                 }
             }
@@ -96,9 +94,10 @@ public class HashTableQuad {
         }
         maxKeys = (int) (size * maxLoad);
         table = new Integer[size];
-        for (int i = 0; i < duplicate.length; i++) {
-            if (duplicate[i] != null) {
-                this.insert(duplicate[i]);
+        keys = 1;
+        for (Integer value : duplicate) {
+            if (value != null) {
+                this.insert(value);
             }
         }
     }
@@ -106,7 +105,7 @@ public class HashTableQuad {
     public boolean isIn(int n) { //n
         int index = n % size;
         int count = 0;
-        while (table[index] != null) {
+        while (index != -1 && table[index] != null) {
             if (table[index] == n) {
                 return true;
             } else {
@@ -120,7 +119,7 @@ public class HashTableQuad {
     public void printKeys() {
         for (int i = 0; i < size; i++) {
             if (table[i] != null) {
-                System.out.println(table[i]);
+                System.out.print(table[i] + ", ");
             }
         }
     }

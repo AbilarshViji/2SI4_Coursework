@@ -94,6 +94,7 @@ public class HashTableLin {
         }
         maxKeys = (int) (size * maxLoad);
         table = new Integer[size];
+        keys = 1;
         for (int i = 0; i < duplicate.length; i++) {
             if (duplicate[i] != null) {
                 this.insert(duplicate[i]);
@@ -103,6 +104,7 @@ public class HashTableLin {
 
     public boolean isIn(int n) { //n
         int index = n % size;
+        boolean lastIndexCase = false;
         while (table[index] != null) {
             if (table[index] == n) {
                 return true;
@@ -110,16 +112,39 @@ public class HashTableLin {
                 index++;
                 if (index >= (size - 1)) {
                     index = 0;
+                    if (lastIndexCase) {
+                        return false;
+                    }
+                    lastIndexCase = true;
+                } else if (index == n % size) {
+                    return false;
                 }
             }
         }
         return false;
     }
 
+    public int isInBonus(int n) { //n
+        int index = n % size;
+        int count = 0;
+        while (table[index] != null) {
+            if (table[index] == n) {
+                return 0;
+            } else {
+                index++;
+                count++;
+                if (index >= (size - 1)) {
+                    index = 0;
+                }
+            }
+        }
+        return count;
+    }
+
     public void printKeys() {
         for (int i = 0; i < size; i++) {
             if (table[i] != null) {
-                System.out.println(table[i]);
+                System.out.print(table[i] + ", ");
             }
         }
     }
