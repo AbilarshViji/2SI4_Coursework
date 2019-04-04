@@ -16,7 +16,7 @@ public class Main {
         System.out.println(maxHeap.toString());
         //for (int i=0;i<5;i++){
         System.out.println(maxHeap.deleteMax());//}
-        Integer[] test = {5, 12, 4, 3, 2, 54353, 324, 1, 14, 34, 4};
+        Integer[] test = {5, 12, 3, 2, 54353, 1, 420, 14, 34, 4};
         maxHeap.heapsort(test);
         return;
     }

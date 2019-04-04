@@ -57,7 +57,7 @@ public class MaxHeap {
             return max;
         }
 
-        if (heap[current] < heap[getLeftChild(current)] || heap[0] < heap[getRightChild(current)]) {
+        if (heap[current] < heap[getLeftChild(current)] || heap[current] < heap[getRightChild(current)]) {
             if (heap[getLeftChild(current)] > heap[getRightChild(current)]) {
                 swap(current, getLeftChild(current));
                 deleteMax(getLeftChild(current));
@@ -76,14 +76,13 @@ public class MaxHeap {
         if (i >= (heapSize / 2) && i <= heapSize) {
             return;
         }
-        if (heap[i] < heap[getLeftChild(i)] || heap[0] < heap[getRightChild(i)]) {
+        if (heap[i] < heap[getLeftChild(i)] || heap[i] < heap[getRightChild(i)]) {
             if (heap[getLeftChild(i)] > heap[getRightChild(i)]) {
                 swap(i, getLeftChild(i));
                 deleteMax(getLeftChild(i));
             } else {
                 swap(i, getRightChild(i));
                 deleteMax(getRightChild(i));
-                ;
             }
         }
     }
@@ -101,7 +100,7 @@ public class MaxHeap {
 
         for (int i = arrayToSort.length - 1; i >= 0; i--) {
             arrayToSort[i] = sorted.deleteMax();
-            System.out.println(arrayToSort[i]);
+            System.out.print(arrayToSort[i] + ", ");
         }
     }
 
@@ -118,7 +117,7 @@ public class MaxHeap {
     }
 
     private int getParent(int i) {
-        return (i - 1) / 2;
+        return (i) / 2;
     }
 
     private int getLeftChild(int i) {
